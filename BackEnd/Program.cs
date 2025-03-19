@@ -11,6 +11,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        builder => builder
+            .WithOrigins("https://localhost:YOUR_FRONTEND_PORT")
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
 
 #region Dependency Injection (DI)
 
@@ -40,5 +48,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseAuthorization();
+app.UseCors("AllowFrontend");
 app.MapControllers();
 app.Run();
