@@ -6,7 +6,7 @@ builder.Services.AddControllersWithViews();
 // Register HttpClient
 builder.Services.AddHttpClient("ApiClient", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:5101/");
+    client.BaseAddress = new Uri("http://localhost:5163/");
 });
 
 var app = builder.Build();

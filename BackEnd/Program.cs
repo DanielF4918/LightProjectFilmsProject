@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Agregar servicios
+// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -15,7 +15,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
         builder => builder
-            .WithOrigins("https://localhost:YOUR_FRONTEND_PORT")
+            .WithOrigins("https://localhost:5101")
             .AllowAnyMethod()
             .AllowAnyHeader());
 });
@@ -27,14 +27,13 @@ builder.Services.AddDbContext<RentalSystem>(options =>
 
 builder.Services.AddScoped<IClientDAL, ClientDAL>();
 builder.Services.AddScoped<IEmployeeDAL, EmployeeDAL>();
-builder.Services.AddScoped<IEventoDAL, EventoDAL>();  
+builder.Services.AddScoped<IEventoDAL, EventoDAL>();
 builder.Services.AddScoped<IEquipmentDAL, EquipmentDAL>();
 builder.Services.AddScoped<IPaymentDAL, PaymentDAL>();
 builder.Services.AddScoped<IRentalDAL, RentalDAL>();
 builder.Services.AddScoped<IRentalDetailDAL, RentalDetailDAL>();
 
 builder.Services.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajo>();
-
 
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
@@ -46,8 +45,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    app.UseDeveloperExceptionPage();
 }
-app.UseAuthorization();
+
+app.UseRouting();
 app.UseCors("AllowFrontend");
+app.UseAuthorization();
 app.MapControllers();
+
 app.Run();

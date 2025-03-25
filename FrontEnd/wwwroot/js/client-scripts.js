@@ -31,11 +31,13 @@ $(document).ready(function () {
     // View client details
     $('.view-client').click(function () {
         var clientId = $(this).data('id');
+        console.log("View client ID:", clientId);
 
         $.ajax({
             url: getClientByIdUrl + '/' + clientId,
             type: 'GET',
             success: function (client) {
+                console.log("Client data received:", client);
                 $('#view-idClient').text(client.idClient);
                 $('#view-firstName').text(client.firstName);
                 $('#view-lastName').text(client.lastName);
@@ -53,12 +55,18 @@ $(document).ready(function () {
     // Edit client
     $('.edit-client').click(function () {
         var clientId = $(this).data('id');
+        console.log("Edit client ID from button:", clientId);
 
         $.ajax({
             url: getClientByIdUrl + '/' + clientId,
             type: 'GET',
             success: function (client) {
+                console.log("Edit client data received:", client);
+                console.log("Client ID from API response:", client.idClient);
+
                 $('#edit-idClient').val(client.idClient);
+                console.log("ID value after setting in form:", $('#edit-idClient').val());
+
                 $('#edit-firstName').val(client.firstName);
                 $('#edit-lastName').val(client.lastName);
                 $('#edit-phone').val(client.phone);
@@ -72,13 +80,19 @@ $(document).ready(function () {
         });
     });
 
+
+
     // Delete client
     $('.delete-client').click(function () {
         var clientId = $(this).data('id');
         var clientName = $(this).data('name');
 
+        console.log("Delete client ID:", clientId, "Name:", clientName);
+
         $('#delete-idClient').val(clientId);
         $('#delete-clientName').text(clientName);
+
+        console.log("Delete form ID field value:", $('#delete-idClient').val());
     });
 
     // Form validations

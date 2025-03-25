@@ -18,7 +18,11 @@ namespace FrontEnd.Controllers
         public ClientController(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient("ApiClient");
-            _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            _jsonOptions = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                PropertyNamingPolicy = null  // Preserve property names as-is
+            };
         }
 
         public async Task<IActionResult> Index()
@@ -89,7 +93,17 @@ public async Task<IActionResult> Create(ClientViewModel clientViewModel)
         {
             try
             {
-                // Convert ClientViewModel to match what the backend expects
+                Console.WriteLine($"Frontend Edit - Client ID from form: {clientViewModel.IdClient}");
+                Console.WriteLine($"Frontend Edit - Client Name: {clientViewModel.FirstName} {clientViewModel.LastName}");
+
+                if (clientViewModel.IdClient <= 0)
+                {
+                    Console.WriteLine("ERROR: Invalid ID - it's zero or negative!");
+                    TempData["Message"] = "Error: Client ID is invalid (zero or negative)";
+                    TempData["IsError"] = true;
+                    return RedirectToAction(nameof(Index));
+                }
+
                 var client = new
                 {
                     IdClient = clientViewModel.IdClient,
@@ -100,51 +114,87 @@ public async Task<IActionResult> Create(ClientViewModel clientViewModel)
                     Location = clientViewModel.Location
                 };
 
+                var json = System.Text.Json.JsonSerializer.Serialize(client);
+                Console.WriteLine($"JSON being sent to backend: {json}");
+
                 var response = await _httpClient.PutAsJsonAsync("api/Client", client);
-                response.EnsureSuccessStatusCode();
-                TempData["Message"] = "Client updated successfully.";
+                var content = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Edit response: {response.StatusCode}, Content: {content}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Message"] = "Client updated successfully.";
+                }
+                else
+                {
+                    TempData["Message"] = $"Error updating client: {response.StatusCode}. {content}";
+                    TempData["IsError"] = true;
+                }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
-                TempData["Message"] = $"Error updating client: {ex.Message}";
+                TempData["Message"] = $"Exception updating client: {ex.Message}";
                 TempData["IsError"] = true;
             }
             return RedirectToAction(nameof(Index));
         }
 
+
         [HttpPost]
-        public async Task<IActionResult> Delete(int id)
+public async Task<IActionResult> Delete(int id)
+{
+    try
+    {
+        var response = await _httpClient.DeleteAsync($"api/Client/{id}");
+        var content = await response.Content.ReadAsStringAsync();
+        
+        Console.WriteLine($"Delete response: {response.StatusCode}, Content: {content}");
+        
+        if (response.IsSuccessStatusCode)
         {
-            try
-            {
-                var response = await _httpClient.DeleteAsync($"api/Client/{id}");
-                response.EnsureSuccessStatusCode();
-                TempData["Message"] = "Client deleted successfully.";
-            }
-            catch (HttpRequestException ex)
-            {
-                TempData["Message"] = $"Error deleting client: {ex.Message}";
-                TempData["IsError"] = true;
-            }
+            TempData["Message"] = "Client deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
+        else
+        {
+            TempData["Message"] = $"Error deleting client: {response.StatusCode}";
+            TempData["IsError"] = true;
+            return RedirectToAction(nameof(Index));
+        }
+    }
+    catch (Exception ex)
+    {
+        TempData["Message"] = $"Exception deleting client: {ex.Message}";
+        TempData["IsError"] = true;
+        return RedirectToAction(nameof(Index));
+    }
+}
+
 
         [HttpGet]
         public async Task<IActionResult> GetClientById(int id)
         {
             try
             {
+                Console.WriteLine($"Getting client with ID: {id}");
                 var client = await _httpClient.GetFromJsonAsync<ClientViewModel>($"api/Client/{id}", _jsonOptions);
+                if (client == null)
+                {
+                    return NotFound($"Client with ID {id} not found");
+                }
+                Console.WriteLine($"Retrieved client: {client.FirstName} {client.LastName} with ID {client.IdClient}");
                 return Json(client);
             }
             catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
                 return NotFound($"Client with ID {id} not found");
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
+                Console.WriteLine($"Error retrieving client: {ex.Message}");
                 return StatusCode(500, $"Error retrieving client: {ex.Message}");
             }
         }
+
     }
 }
