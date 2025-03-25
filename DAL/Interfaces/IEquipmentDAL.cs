@@ -1,15 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Domain.Domain;
+﻿using Domain.Domain;
 
 namespace DAL.Interfaces
 {
-    public interface IEquipmentDAL
+    public interface IEquipmentDAL : IDALGenerico<Equipment>
     {
-        Task<List<Equipment>> GetAllEquipment();
-        Task<Equipment> GetEquipmentById(int id);
-        Task<Equipment> CreateEquipment(Equipment equipment);
-        Task UpdateEquipment(Equipment equipment);
-        Task DeleteEquipment(int id);
     }
 }

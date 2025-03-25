@@ -1,15 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Domain.Domain;
+﻿using Domain.Domain;
 
 namespace DAL.Interfaces
 {
-    public interface IEventoDAL
+    public interface IEventoDAL : IDALGenerico<Evento>
     {
-        Task<List<Evento>> GetAllEventos();
-        Task<Evento> GetEventoById(int id);
-        Task<Evento> CreateEvento(Evento evento);
-        Task UpdateEvento(Evento evento);
-        Task DeleteEvento(int id);
     }
 }
