@@ -7,11 +7,11 @@ namespace DAL.Implementations
     {
         public IClientDAL Clients { get; set; }
         public IEmployeeDAL Employees { get; set; }
-        public IEventoDAL Eventos { get; set; }  // 🔥 Asegúrate de que esté aquí
+        public IEventoDAL Eventos { get; set; } 
         public IEquipmentDAL Equipment { get; set; }
         public IPaymentDAL Payments { get; set; }
         public IRentalDAL Rentals { get; set; }
-        public IRentalDetailDAL RentalDetails { get; set; }
+        public IRentalDetailsDAL RentalDetails { get; set; }
 
         private readonly RentalSystem _context;
 
@@ -22,7 +22,7 @@ namespace DAL.Implementations
                                IEquipmentDAL equipmentDAL,
                                IPaymentDAL paymentDAL,
                                IRentalDAL rentalDAL,
-                               IRentalDetailDAL rentalDetailDAL)
+                               IRentalDetailsDAL rentalDetailDAL)
         {
             _context = context;
             Clients = clientDAL;
