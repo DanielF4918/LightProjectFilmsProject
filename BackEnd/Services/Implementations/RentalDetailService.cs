@@ -10,9 +10,15 @@ namespace BackEnd.Services.Implementations
 {
     public class RentalDetailService : IRentalDetailService
     {
+<<<<<<< Updated upstream
         private readonly IRentalDetailDAL _rentalDetailDAL;
 
         public RentalDetailService(IRentalDetailDAL rentalDetailDAL)
+=======
+        private readonly IRentalDetailsDAL _rentalDetailDAL;
+
+        public RentalDetailService(IRentalDetailsDAL rentalDetailDAL)
+>>>>>>> Stashed changes
         {
             _rentalDetailDAL = rentalDetailDAL;
         }
@@ -37,11 +43,19 @@ namespace BackEnd.Services.Implementations
             var rentalDetail = _rentalDetailDAL.GetById(id);
             return new RentalDetailDTO
             {
+<<<<<<< Updated upstream
                 IdRentalDetail = rentalDetail.IdRentalDetail,
                 IdRental = rentalDetail.IdRental,
                 IdEquipment = rentalDetail.IdEquipment,
                 Quantity = rentalDetail.Quantity,
                 UnitPrice = rentalDetail.UnitPrice
+=======
+                IdDetail = rentalDetail.IdDetail,
+                IdRental = rentalDetail.IdRental,
+                IdEquipment = rentalDetail.IdEquipment,
+                Quantity = rentalDetail.Quantity,
+                Subtotal = rentalDetail.Subtotal
+>>>>>>> Stashed changes
             };
         }
 
@@ -49,11 +63,19 @@ namespace BackEnd.Services.Implementations
         {
             return _rentalDetailDAL.GetAll().Select(rentalDetail => new RentalDetailDTO
             {
+<<<<<<< Updated upstream
                 IdRentalDetail = rentalDetail.IdRentalDetail,
                 IdRental = rentalDetail.IdRental,
                 IdEquipment = rentalDetail.IdEquipment,
                 Quantity = rentalDetail.Quantity,
                 UnitPrice = rentalDetail.UnitPrice
+=======
+                IdDetail = rentalDetail.IdDetail,
+                IdRental = rentalDetail.IdRental,
+                IdEquipment = rentalDetail.IdEquipment,
+                Quantity = rentalDetail.Quantity,
+                Subtotal = rentalDetail.Subtotal
+>>>>>>> Stashed changes
             }).ToList();
         }
     }

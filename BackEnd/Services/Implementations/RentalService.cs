@@ -37,10 +37,17 @@ namespace BackEnd.Services.Implementations
             return new RentalDTO
             {
                 IdRental = rental.IdRental,
+<<<<<<< Updated upstream
                 StartDate = rental.StartDate,
                 EndDate = rental.EndDate,
                 TotalAmount = rental.TotalAmount,
                 Status = rental.Status
+=======
+                RentalDate = rental.RentalDate,
+                ReturnDate = rental.ReturnDate,
+                TotalCost = rental.TotalCost,
+                IdEvent = rental.IdEvent
+>>>>>>> Stashed changes
             };
         }
 
@@ -49,10 +56,17 @@ namespace BackEnd.Services.Implementations
             return _rentalDAL.GetAll().Select(rental => new RentalDTO
             {
                 IdRental = rental.IdRental,
+<<<<<<< Updated upstream
                 StartDate = rental.StartDate,
                 EndDate = rental.EndDate,
                 TotalAmount = rental.TotalAmount,
                 Status = rental.Status
+=======
+                RentalDate = rental.RentalDate,
+                ReturnDate = rental.ReturnDate,
+                TotalCost = rental.TotalCost,
+                IdEvent = rental.IdEvent
+>>>>>>> Stashed changes
             }).ToList();
         }
     }

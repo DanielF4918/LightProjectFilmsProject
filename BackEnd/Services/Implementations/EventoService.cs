@@ -36,6 +36,7 @@ namespace BackEnd.Services.Implementations
             var evento = _eventoDAL.GetById(id);
             return new EventoDTO
             {
+<<<<<<< Updated upstream
                 IdEvento = evento.IdEvento,
                 Name = evento.Name,
                 Description = evento.Description,
@@ -43,6 +44,13 @@ namespace BackEnd.Services.Implementations
                 EndDate = evento.EndDate,
                 Location = evento.Location,
                 Status = evento.Status
+=======
+                IdEvent = evento.IdEvent,
+                EventName = evento.EventName,
+                StartDate = evento.StartDate,
+                EndDate = evento.EndDate,
+                Location = evento.Location
+>>>>>>> Stashed changes
             };
         }
 
@@ -50,6 +58,7 @@ namespace BackEnd.Services.Implementations
         {
             return _eventoDAL.GetAll().Select(evento => new EventoDTO
             {
+<<<<<<< Updated upstream
                 IdEvento = evento.IdEvento,
                 Name = evento.Name,
                 Description = evento.Description,
@@ -57,6 +66,14 @@ namespace BackEnd.Services.Implementations
                 EndDate = evento.EndDate,
                 Location = evento.Location,
                 Status = evento.Status
+=======
+                IdEvent = evento.IdEvent,
+                EventName = evento.EventName,
+                StartDate = evento.StartDate,
+                EndDate = evento.EndDate,
+                Location = evento.Location,
+                IdClient = evento.IdClient
+>>>>>>> Stashed changes
             }).ToList();
         }
     }
