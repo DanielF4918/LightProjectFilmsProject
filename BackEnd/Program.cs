@@ -1,4 +1,5 @@
 using BackEnd.Services.Implementations;
+using BackEnd.Services.Interface;
 using BackEnd.Services.Interfaces;
 using DAL.Implementations;
 using DAL.Interfaces;
@@ -35,8 +36,10 @@ builder.Services.AddScoped<IRentalDetailDAL, RentalDetailDAL>();
 
 builder.Services.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajo>();
 
+builder.Services.AddScoped<IEquipmentService, EquipmentService>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+
 
 #endregion
 

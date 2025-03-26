@@ -10,7 +10,7 @@ namespace DAL.Interfaces
         IEquipmentDAL Equipment { get; }
         IPaymentDAL Payments { get; }
         IRentalDAL Rentals { get; }
-        IRentalDetailDAL RentalDetails { get; }
+        IRentalDetailsDAL RentalDetails { get; }
 
         bool Complete();
     }
