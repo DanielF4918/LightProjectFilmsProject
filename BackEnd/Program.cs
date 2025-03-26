@@ -31,7 +31,7 @@ builder.Services.AddScoped<IEventoDAL, EventoDAL>();
 builder.Services.AddScoped<IEquipmentDAL, EquipmentDAL>();
 builder.Services.AddScoped<IPaymentDAL, PaymentDAL>();
 builder.Services.AddScoped<IRentalDAL, RentalDAL>();
-builder.Services.AddScoped<IRentalDetailDAL, RentalDetailDAL>();
+builder.Services.AddScoped<IRentalDetailsDAL, RentalDetailDAL>();
 
 builder.Services.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajo>();
 

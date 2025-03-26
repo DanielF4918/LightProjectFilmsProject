@@ -37,10 +37,9 @@ namespace BackEnd.Services.Implementations
             return new RentalDTO
             {
                 IdRental = rental.IdRental,
-                RentalDate = rental.RentalDate,
-                ReturnDate = rental.ReturnDate,
-                TotalCost = rental.TotalCost
-
+                TotalCost = rental.TotalCost,
+                RentalDate = rental.RentalDate.ToDateTime(TimeOnly.MinValue),
+                ReturnDate = rental.ReturnDate.ToDateTime(TimeOnly.MinValue)
             };
         }
 
@@ -49,8 +48,8 @@ namespace BackEnd.Services.Implementations
             return _rentalDAL.GetAll().Select(rental => new RentalDTO
             {
                 IdRental = rental.IdRental,
-                RentalDate = rental.RentalDate,
-                ReturnDate = rental.ReturnDate,
+                RentalDate = rental.RentalDate.ToDateTime(TimeOnly.MinValue),
+                ReturnDate = rental.ReturnDate.ToDateTime(TimeOnly.MinValue),
                 TotalCost = rental.TotalCost
             }).ToList();
         }

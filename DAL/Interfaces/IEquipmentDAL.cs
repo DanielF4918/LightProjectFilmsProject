@@ -4,7 +4,7 @@ using Domain.Domain;
 
 namespace DAL.Interfaces
 {
-    public interface IEquipmentDAL
+    public interface IEquipmentDAL : IDALGenerico<Equipment>
     {
     }
 }

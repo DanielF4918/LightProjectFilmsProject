@@ -23,14 +23,14 @@ namespace BackEnd.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<RentalDetailDTO> Get()
+        public IEnumerable<RentalDetailsDTO> Get()
         {
             _logger.LogDebug("Obteniendo todos los detalles de renta");
             return _rentalDetailService.GetAll();
         }
 
         [HttpGet("{id}")]
-        public ActionResult<RentalDetailDTO> Get(int id)
+        public ActionResult<RentalDetailsDTO> Get(int id)
         {
             var rentalDetail = _rentalDetailService.GetById(id);
             if (rentalDetail == null)
