@@ -1,7 +1,7 @@
 ﻿using BackEnd.DTO;
 using Domain.Domain;
 
-namespace BackEnd.Services.Interface
+namespace BackEnd.Services.Interfaces
 {
     public interface IEquipmentService
     {

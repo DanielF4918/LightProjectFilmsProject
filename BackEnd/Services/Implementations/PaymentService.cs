@@ -38,16 +38,8 @@ namespace BackEnd.Services.Implementations
             return new PaymentDTO
             {
                 IdPayment = payment.IdPayment,
-<<<<<<< Updated upstream
-                Amount = payment.Amount,
-                PaymentDate = payment.PaymentDate,
-                PaymentMethod = payment.PaymentMethod,
-                Status = payment.Status
-=======
                 AmountPaid = payment.AmountPaid,
-                PaymentDate = payment.PaymentDate,
-                PaymentMethod = payment.PaymentMethod,
->>>>>>> Stashed changes
+                PaymentMethod = payment.PaymentMethod
             };
         }
 
@@ -56,16 +48,8 @@ namespace BackEnd.Services.Implementations
             return _paymentDAL.GetAll().Select(payment => new PaymentDTO
             {
                 IdPayment = payment.IdPayment,
-<<<<<<< Updated upstream
-                Amount = payment.Amount,
-                PaymentDate = payment.PaymentDate,
-                PaymentMethod = payment.PaymentMethod,
-                Status = payment.Status
-=======
                 AmountPaid = payment.AmountPaid,
-                PaymentDate = payment.PaymentDate,
                 PaymentMethod = payment.PaymentMethod
->>>>>>> Stashed changes
             }).ToList();
         }
     }

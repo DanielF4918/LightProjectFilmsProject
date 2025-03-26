@@ -1,5 +1,5 @@
 ﻿using BackEnd.DTO;
-using BackEnd.Services.Interface;
+using BackEnd.Services.Interfaces;
 using DAL.Interfaces;
 using Domain.Domain;
 

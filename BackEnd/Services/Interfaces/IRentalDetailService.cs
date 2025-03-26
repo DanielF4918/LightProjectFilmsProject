@@ -10,7 +10,7 @@ namespace BackEnd.Services.Interfaces
         void Add(RentalDetail entity);
         void Update(RentalDetail entity);
         void Delete(int id);
-        RentalDetailDTO GetById(int id);
-        IEnumerable<RentalDetailDTO> GetAll();
+        RentalDetailsDTO GetById(int id);
+        IEnumerable<RentalDetailsDTO> GetAll();
     }
 }
