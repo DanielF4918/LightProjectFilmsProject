@@ -1,4 +1,5 @@
 ﻿using Domain.Domain;
+using System.Collections.Generic;
 
 namespace DAL.Interfaces
 {
