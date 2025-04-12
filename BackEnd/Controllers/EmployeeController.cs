@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using BackEnd.Filters; // ✅ Agregado para el filtro de rol
 
 namespace BackEnd.Controllers
 {
@@ -41,6 +42,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpPost]
+        [AuthorizeRole("Admin")] // ✅ Solo Admin puede crear
         public IActionResult Post([FromBody] Employee employee)
         {
             if (employee == null)
@@ -54,6 +56,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpPut]
+        [AuthorizeRole("Admin")] // ✅ Solo Admin puede editar
         public IActionResult Put([FromBody] Employee employee)
         {
             try
@@ -75,6 +78,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpDelete("{id}")]
+        [AuthorizeRole("Admin")] // ✅ Solo Admin puede eliminar
         public IActionResult Delete(int id)
         {
             _employeeService.Delete(id);
@@ -83,3 +87,4 @@ namespace BackEnd.Controllers
         }
     }
 }
+

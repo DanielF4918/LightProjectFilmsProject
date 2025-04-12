@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using BackEnd.Filters; // ✅ Filtro de roles
 
 namespace BackEnd.Controllers
 {
@@ -23,14 +24,14 @@ namespace BackEnd.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<RentalDetailDTO> Get()
+        public IEnumerable<RentalDetailsDTO> Get()
         {
             _logger.LogDebug("Obteniendo todos los detalles de renta");
             return _rentalDetailService.GetAll();
         }
 
         [HttpGet("{id}")]
-        public ActionResult<RentalDetailDTO> Get(int id)
+        public ActionResult<RentalDetailsDTO> Get(int id)
         {
             var rentalDetail = _rentalDetailService.GetById(id);
             if (rentalDetail == null)
@@ -42,6 +43,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpPost]
+        [AuthorizeRole("Admin")] // ✅ Solo Admin puede agregar detalles de renta
         public IActionResult Post([FromBody] RentalDetail rentalDetail)
         {
             if (rentalDetail == null)
@@ -55,6 +57,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpPut]
+        [AuthorizeRole("Admin")] // ✅ Solo Admin puede editar detalles
         public IActionResult Put([FromBody] RentalDetail rentalDetail)
         {
             if (rentalDetail == null)
@@ -68,6 +71,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpDelete("{id}")]
+        [AuthorizeRole("Admin")] // ✅ Solo Admin puede eliminar detalles
         public IActionResult Delete(int id)
         {
             _rentalDetailService.Delete(id);

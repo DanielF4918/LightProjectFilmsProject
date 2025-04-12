@@ -2,8 +2,6 @@
 using BackEnd.Services.Interfaces;
 using DAL.Interfaces;
 using Domain.Domain;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace BackEnd.Services.Implementations
 {
@@ -34,6 +32,11 @@ namespace BackEnd.Services.Implementations
         public ClientDTO GetById(int id)
         {
             var client = _clientDAL.GetById(id);
+            if (client == null)
+            {
+                return null;
+            }
+
             return new ClientDTO
             {
                 IdClient = client.IdClient,

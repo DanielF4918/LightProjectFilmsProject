@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using BackEnd.Filters; // ✅ Agregado para usar [AuthorizeRole]
 
 namespace BackEnd.Controllers
 {
@@ -42,6 +43,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpPost]
+        [AuthorizeRole("Admin")] // ✅ Solo Admin puede agregar pagos
         public IActionResult Post([FromBody] Payment payment)
         {
             if (payment == null)
@@ -55,6 +57,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpPut]
+        [AuthorizeRole("Admin")] // ✅ Solo Admin puede editar pagos
         public IActionResult Put([FromBody] Payment payment)
         {
             if (payment == null)
@@ -68,6 +71,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpDelete("{id}")]
+        [AuthorizeRole("Admin")] // ✅ Solo Admin puede eliminar pagos
         public IActionResult Delete(int id)
         {
             _paymentService.Delete(id);

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using BackEnd.Filters; // ✅ Agregado para proteger métodos por rol
 
 namespace BackEnd.Controllers
 {
@@ -41,6 +42,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpPost]
+        [AuthorizeRole("Admin")] // ✅ Solo Admin puede crear una renta
         public IActionResult Post([FromBody] Rental rental)
         {
             if (rental == null)
@@ -54,6 +56,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpPut]
+        [AuthorizeRole("Admin")] // ✅ Solo Admin puede editar una renta
         public IActionResult Put([FromBody] Rental rental)
         {
             if (rental == null)
@@ -67,6 +70,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpDelete("{id}")]
+        [AuthorizeRole("Admin")] // ✅ Solo Admin puede eliminar una renta
         public IActionResult Delete(int id)
         {
             _rentalService.Delete(id);
@@ -75,3 +79,4 @@ namespace BackEnd.Controllers
         }
     }
 }
+

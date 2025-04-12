@@ -3,8 +3,8 @@ using BackEnd.Services.Interfaces;
 using Domain.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
+using BackEnd.Filters; // ✅ Agregado para usar el filtro de roles
 
 namespace BackEnd.Controllers
 {
@@ -41,6 +41,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpPost]
+        [AuthorizeRole("Admin")] // ✅ Solo Admin puede crear clientes
         public IActionResult Post([FromBody] Client client)
         {
             if (client == null)
@@ -54,32 +55,46 @@ namespace BackEnd.Controllers
         }
 
         [HttpPut]
+        [AuthorizeRole("Admin")] // ✅ Solo Admin puede actualizar clientes
         public IActionResult Put([FromBody] Client client)
         {
-            try
-            {
-                if (client == null)
-                {
-                    _logger.LogError("Intento de actualizar un cliente con datos nulos.");
-                    return BadRequest("Invalid client data.");
-                }
+            _logger.LogInformation($"Backend Put method - Client ID: {client.IdClient}");
 
-                _clientService.Update(client);
-                return NoContent();
-            }
-            catch (Exception e)
+            if (client == null || client.IdClient == 0)
             {
-                _logger.LogError($"Error al actualizar cliente: {e.Message}");
-                return StatusCode(500, "Internal Server Error");
+                _logger.LogError("Intento de actualizar un cliente con datos nulos o ID inválido.");
+                return BadRequest("Invalid client data or ID.");
             }
+
+            _clientService.Update(client);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
+        [AuthorizeRole("Admin")] // ✅ Solo Admin puede eliminar clientes
         public IActionResult Delete(int id)
         {
-            _clientService.Delete(id);
-            _logger.LogInformation($"Cliente con ID {id} eliminado.");
-            return NoContent();
+            try
+            {
+                _logger.LogInformation($"Attempting to delete client with ID {id}");
+
+                var client = _clientService.GetById(id);
+                if (client == null)
+                {
+                    _logger.LogWarning($"Cliente con ID {id} no encontrado para eliminar.");
+                    return NotFound($"Client with ID {id} not found");
+                }
+
+                _clientService.Delete(id);
+                _logger.LogInformation($"Cliente con ID {id} eliminado.");
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error deleting client: {ex.Message}");
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
         }
     }
 }
+

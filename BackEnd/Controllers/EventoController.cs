@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using BackEnd.Filters; // ✅ Agregado para proteger por roles
 
 namespace BackEnd.Controllers
 {
@@ -41,6 +42,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpPost]
+        [AuthorizeRole("Admin")] // ✅ Solo Admin puede agregar eventos
         public IActionResult Post([FromBody] Evento evento)
         {
             if (evento == null)
@@ -54,6 +56,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpPut]
+        [AuthorizeRole("Admin")] // ✅ Solo Admin puede editar eventos
         public IActionResult Put([FromBody] Evento evento)
         {
             if (evento == null)
@@ -67,6 +70,7 @@ namespace BackEnd.Controllers
         }
 
         [HttpDelete("{id}")]
+        [AuthorizeRole("Admin")] // ✅ Solo Admin puede eliminar eventos
         public IActionResult Delete(int id)
         {
             _eventoService.Delete(id);
@@ -75,3 +79,4 @@ namespace BackEnd.Controllers
         }
     }
 }
+
