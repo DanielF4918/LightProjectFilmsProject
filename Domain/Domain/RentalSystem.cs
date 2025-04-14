@@ -27,7 +27,7 @@ public partial class RentalSystem : DbContext
 
     public virtual DbSet<Rental> Rentals { get; set; }
 
-    public virtual DbSet<RentalDetail> RentalDetails { get; set; }
+    public virtual DbSet<RentalDetails> RentalDetails { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -153,7 +153,7 @@ public partial class RentalSystem : DbContext
                 .HasConstraintName("FK__Rental__Id_Event__3D5E1FD2");
         });
 
-        modelBuilder.Entity<RentalDetail>(entity =>
+        modelBuilder.Entity<RentalDetails>(entity =>
         {
             entity.HasKey(e => e.IdDetail).HasName("PK__Rental_D__280A4C9B789BBACF");
 

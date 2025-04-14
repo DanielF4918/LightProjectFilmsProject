@@ -1,37 +1,39 @@
 ﻿using Domain.Domain;
 using DAL.Interfaces;
+using System;
 
 namespace DAL.Implementations
 {
     public class UnidadDeTrabajo : IUnidadDeTrabajo
     {
-        public IClientDAL Clients { get; set; }
-        public IEmployeeDAL Employees { get; set; }
-        public IEventoDAL Eventos { get; set; }  // 🔥 Asegúrate de que esté aquí
-        public IEquipmentDAL Equipment { get; set; }
-        public IPaymentDAL Payments { get; set; }
-        public IRentalDAL Rentals { get; set; }
-        public IRentalDetailDAL RentalDetails { get; set; }
+        public IClientDAL Clients { get; }
+        public IEmployeeDAL Employees { get; }
+        public IEventoDAL Eventos { get; }
+        public IEquipmentDAL Equipment { get; }
+        public IPaymentDAL Payments { get; }
+        public IRentalDAL Rentals { get; }
+        public IRentalDetailDAL RentalDetails { get; }
 
         private readonly RentalSystem _context;
 
-        public UnidadDeTrabajo(RentalSystem context,
-                               IClientDAL clientDAL,
-                               IEmployeeDAL employeeDAL,
-                               IEventoDAL eventoDAL,  
-                               IEquipmentDAL equipmentDAL,
-                               IPaymentDAL paymentDAL,
-                               IRentalDAL rentalDAL,
-                               IRentalDetailDAL rentalDetailDAL)
+        public UnidadDeTrabajo(
+            RentalSystem context,
+            IClientDAL clientDAL,
+            IEmployeeDAL employeeDAL,
+            IEventoDAL eventoDAL,
+            IEquipmentDAL equipmentDAL,
+            IPaymentDAL paymentDAL,
+            IRentalDAL rentalDAL,
+            IRentalDetailDAL rentalDetailsDAL)
         {
             _context = context;
             Clients = clientDAL;
             Employees = employeeDAL;
-            Eventos = eventoDAL; 
+            Eventos = eventoDAL;
             Equipment = equipmentDAL;
             Payments = paymentDAL;
             Rentals = rentalDAL;
-            RentalDetails = rentalDetailDAL;
+            RentalDetails = rentalDetailsDAL;
         }
 
         public bool Complete()

@@ -19,5 +19,5 @@ public partial class Rental
 
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
-    public virtual ICollection<RentalDetail> RentalDetails { get; set; } = new List<RentalDetail>();
+    public virtual ICollection<RentalDetails> RentalDetails { get; set; } = new List<RentalDetails>();
 }

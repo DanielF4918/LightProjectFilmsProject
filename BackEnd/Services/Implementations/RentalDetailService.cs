@@ -1,4 +1,4 @@
-﻿using BackEnd.DTO;
+﻿using BackEnd.DTOs;
 using BackEnd.Services.Interfaces;
 using DAL.Implementations;
 using DAL.Interfaces;
@@ -17,12 +17,12 @@ namespace BackEnd.Services.Implementations
             _rentalDetailDAL = rentalDetailDAL;
         }
 
-        public void Add(RentalDetail entity)
+        public void Add(RentalDetails entity)
         {
             _rentalDetailDAL.Add(entity);
         }
 
-        public void Update(RentalDetail entity)
+        public void Update(RentalDetails entity)
         {
             _rentalDetailDAL.Update(entity);
         }

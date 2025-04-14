@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Domain.Domain;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Domain.Domain;
 
 namespace DAL.Interfaces
 {
-    public interface IRentalDetailsDAL
+    public interface IRentalDetailDAL
     {
         Task<List<RentalDetails>> GetAllRentalDetails();
         Task<RentalDetails> GetRentalDetailsById(int id);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Domain.Domain;
 
-public partial class RentalDetail
+public partial class RentalDetails
 {
     public int IdDetail { get; set; }
 

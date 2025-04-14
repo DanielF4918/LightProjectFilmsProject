@@ -15,5 +15,5 @@ public partial class Equipment
 
     public decimal DailyRate { get; set; }
 
-    public virtual ICollection<RentalDetail> RentalDetails { get; set; } = new List<RentalDetail>();
+    public virtual ICollection<RentalDetails> RentalDetails { get; set; } = new List<RentalDetails>();
 }
