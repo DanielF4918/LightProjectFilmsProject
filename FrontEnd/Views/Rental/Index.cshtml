@@ -1,0 +1,270 @@
+﻿@model IEnumerable<FrontEnd.Models.RentalViewModel>
+
+@{
+    ViewData["Title"] = "Rental Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary">Rental Management</h2>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createRentalModal">
+            <i class="bi bi-plus-circle me-2"></i>Add New Rental
+        </button>
+    </div>
+
+    <!-- Alert for messages -->
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert @(TempData["IsError"] != null && (bool)TempData["IsError"] ? "alert-danger" : "alert-success") alert-dismissible fade show" role="alert">
+            @TempData["Message"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Search and filters -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search by event or cost...">
+                        <button class="btn btn-outline-secondary" type="button" id="searchButton">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rentals Table -->
+    <div id="rentalData" data-get-rentals-url="@Url.Action("Index", "Rental")"></div>
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="rentalTable" class="table table-striped table-hover">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Event</th>
+                            <th>Rental Date</th>
+                            <th>Return Date</th>
+                            <th>Total Cost</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var rental in Model)
+                            {
+                                <tr>
+                                    <td>@rental.IdRental</td>
+                                    <td>@rental.EventName</td>
+                                    <td>@rental.RentalDate.ToString("yyyy-MM-dd")</td>
+                                    <td>@rental.ReturnDate.ToString("yyyy-MM-dd")</td>
+                                    <td>@rental.TotalCost.ToString("C")</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-info view-rental"
+                                                    data-id="@rental.IdRental"
+
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#viewRentalModal">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-warning edit-rental"
+                                                    data-id="@rental.IdRental"
+                                                    data-event-id="@rental.IdEvent"
+                                                    data-event-name="@rental.EventName"
+                                                    data-rental-date="@rental.RentalDate"
+                                                    data-return-date="@rental.ReturnDate"
+                                                    data-total-cost="@rental.TotalCost"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editRentalModal">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-danger delete-rental"
+                                                    data-id="@rental.IdRental"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteRentalModal">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center">No rentals found.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Create Rental Modal -->
+    <div class="modal fade" id="createRentalModal" tabindex="-1" aria-labelledby="createRentalModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="createRentalModalLabel">Create New Rental</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="createRentalForm" asp-action="Create" asp-controller="Rental" method="post">
+                    <div class="modal-body">
+
+                        <!-- Selección de evento -->
+                        <div class="mb-3">
+                            <label for="eventId" class="form-label">Event</label>
+                            <select class="form-control" id="eventId" name="IdEvent" required>
+                                <option value="">Select Event</option>
+                            </select>
+                            <input type="hidden" id="eventName" name="EventName"> <!-- 📌 Campo oculto para almacenar el nombre del evento -->
+                        </div>
+                        <!-- Fecha de alquiler -->
+                        <div class="mb-3">
+                            <label for="rentalDate" class="form-label">Rental Date</label>
+                            <input type="date" class="form-control" id="rentalDate" name="RentalDate" required>
+                        </div>
+                        <!-- Fecha de devolución -->
+                        <div class="mb-3">
+                            <label for="returnDate" class="form-label">Return Date</label>
+                            <input type="date" class="form-control" id="returnDate" name="ReturnDate" required>
+                        </div>
+                        <!-- Costo total -->
+                        <div class="mb-3">
+                            <label for="totalCost" class="form-label">Total Cost ($)</label>
+                            <input type="number" step="0.01" class="form-control" id="totalCost" name="TotalCost" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Create Rental</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Rental Modal -->
+    <div class="modal fade" id="editRentalModal" tabindex="-1" aria-labelledby="editRentalModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-white">
+                    <h5 class="modal-title" id="editRentalModalLabel">Edit Rental</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="editRentalForm" asp-action="Edit" asp-controller="Rental" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" id="edit-idRental" name="IdRental">
+
+                        <div class="mb-3">
+                            <label for="edit-eventId" class="form-label">Event</label>
+                            <select class="form-control" id="edit-eventId" name="IdEvent" required>
+                                <option value="">Select Event</option>
+                            </select>
+                            <input type="hidden" id="edit-eventName" name="EventName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-rentalDate" class="form-label">Rental Date</label>
+                            <input type="date" class="form-control" id="edit-rentalDate" name="RentalDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-returnDate" class="form-label">Return Date</label>
+                            <input type="date" class="form-control" id="edit-returnDate" name="ReturnDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-totalCost" class="form-label">Total Cost ($)</label>
+                            <input type="number" step="0.01" class="form-control" id="edit-totalCost" name="TotalCost" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-warning">Update Rental</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<!-- View Rental Modal -->
+<div class="modal fade" id="viewRentalModal" tabindex="-1" aria-labelledby="viewRentalModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title" id="viewRentalModalLabel">Rental Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-4 fw-bold">ID:</div>
+                        <div class="col-8" id="view-idRental"></div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 fw-bold">Event:</div>
+                        <div class="col-8" id="view-eventName"></div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 fw-bold">Rental Date:</div>
+                        <div class="col-8" id="view-rentalDate"></div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 fw-bold">Return Date:</div>
+                        <div class="col-8" id="view-returnDate"></div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-4 fw-bold">Total Cost:</div>
+                        <div class="col-8" id="view-totalCost"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Delete Rental Modal -->
+<div class="modal fade" id="deleteRentalModal" tabindex="-1" aria-labelledby="deleteRentalModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteRentalModalLabel">Delete Rental</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this rental?</p>
+                <p class="text-danger">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <form id="deleteRentalForm" asp-action="Delete" asp-controller="Rental" method="post">
+                    <input type="hidden" id="delete-idRental" name="id">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete Rental</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        // Add data attributes with URLs that the external JS needs
+        $(document).ready(function() {
+            $('body').attr('data-get-equipment-url', '@Url.Action("GetRentalById", "Rental")');
+        });
+    </script>
+    <script src="~/js/rental-scripts.js"></script>
+}
