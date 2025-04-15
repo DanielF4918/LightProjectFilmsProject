@@ -41,7 +41,8 @@ namespace BackEnd.Services.Implementations
                 LastName = employee.LastName,
                 Role = employee.Role,
                 Phone = employee.Phone,
-                Email = employee.Email
+                Email = employee.Email,
+                SalaryPerEvent = employee.SalaryPerEvent
             };
         }
 
@@ -54,7 +55,8 @@ namespace BackEnd.Services.Implementations
                 LastName = employee.LastName,
                 Role = employee.Role,
                 Phone = employee.Phone,
-                Email = employee.Email
+                Email = employee.Email,
+                SalaryPerEvent = employee.SalaryPerEvent
             }).ToList();
         }
     }
