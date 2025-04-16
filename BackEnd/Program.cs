@@ -15,7 +15,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
         builder => builder
-            .WithOrigins("https://localhost:7084")
+            .WithOrigins("https://localhost:5101")
             .AllowAnyMethod()
             .AllowAnyHeader());
 });
@@ -41,6 +41,8 @@ builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IEventoService, EventoService>();
 builder.Services.AddScoped<IRentalService, RentalService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IEventoService, EventoService>(); 
+
 
 #endregion
 

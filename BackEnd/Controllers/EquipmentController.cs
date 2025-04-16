@@ -59,19 +59,27 @@ namespace BackEnd.Controllers
 
             _equipmentService.Add(equipment);
             return CreatedAtAction(nameof(Get), new { id = equipment.IdEquipment }, equipmentDTO);
-        }
+        } 
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Equipment equipment)
+        public IActionResult Put(int id, [FromBody] EquipmentDTO equipmentDTO)
         {
             try
             {
-                if (equipment == null || equipment.IdEquipment != id) // Verificamos que el ID del objeto y el de la URL coincidan
+                if (equipmentDTO == null)
                 {
-                    _logger.LogError("Intento de actualizar equipo con datos incorrectos");
-                    return BadRequest("Invalid equipment data");
+                    _logger.LogError("El intento de actualizar un equipo fue con datos nulos");
+                    return BadRequest("Equipment data is null");
                 }
 
+                var equipment = new Equipment
+                {
+                    IdEquipment = id,
+                    EquipmentName = equipmentDTO.EquipmentName,
+                    Description = equipmentDTO.Description,
+                    Category = equipmentDTO.Category,
+                    DailyRate = equipmentDTO.DailyRate
+                };
                 _equipmentService.Update(equipment);
                 return Ok(new { message = "Equipment editado con éxito" });
             }
