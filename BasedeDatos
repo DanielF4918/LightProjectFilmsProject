@@ -1,0 +1,84 @@
+CREATE DATABASE RentalSystem;
+GO
+
+USE RentalSystem;
+GO
+
+-- Tabla Client
+CREATE TABLE Client (
+    Id_Client INT IDENTITY(1,1) PRIMARY KEY,
+    First_Name NVARCHAR(50) NOT NULL,
+    Last_Name NVARCHAR(50) NOT NULL,
+    Phone NVARCHAR(20) NOT NULL,
+    Email NVARCHAR(100) UNIQUE NOT NULL,
+    Location NVARCHAR(255) NOT NULL
+);
+GO
+
+-- Tabla Evento
+CREATE TABLE Evento (
+    Id_Event INT IDENTITY(1,1) PRIMARY KEY,
+    Event_Name NVARCHAR(100) NOT NULL,
+    Start_Date DATE NOT NULL,
+    End_Date DATE NOT NULL,
+    Location NVARCHAR(255) NOT NULL,
+    Id_Client INT NOT NULL,
+    FOREIGN KEY (Id_Client) REFERENCES Client(Id_Client) ON DELETE CASCADE
+);
+GO
+
+-- Tabla Rental
+CREATE TABLE Rental (
+    Id_Rental INT IDENTITY(1,1) PRIMARY KEY,
+    Id_Event INT NOT NULL,
+    Rental_Date DATE NOT NULL,
+    Return_Date DATE NOT NULL,
+    Total_Cost DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (Id_Event) REFERENCES Evento(Id_Event) ON DELETE CASCADE
+);
+GO
+
+-- Tabla Equipment
+CREATE TABLE Equipment (
+    Id_Equipment INT IDENTITY(1,1) PRIMARY KEY,
+    Equipment_Name NVARCHAR(100) NOT NULL,
+    Description NVARCHAR(255) NOT NULL,
+    Category NVARCHAR(50) NOT NULL,
+    Daily_Rate DECIMAL(10,2) NOT NULL
+);
+GO
+
+-- Tabla Rental_detail
+CREATE TABLE Rental_Detail (
+    Id_Detail INT IDENTITY(1,1) PRIMARY KEY,
+    Id_Rental INT NOT NULL,
+    Id_Equipment INT NOT NULL,
+    Quantity INT NOT NULL,
+    Subtotal DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (Id_Rental) REFERENCES Rental(Id_Rental) ON DELETE CASCADE,
+    FOREIGN KEY (Id_Equipment) REFERENCES Equipment(Id_Equipment) ON DELETE CASCADE
+);
+GO
+
+-- Tabla Payment
+CREATE TABLE Payment (
+    Id_Payment INT IDENTITY(1,1) PRIMARY KEY,
+    Id_Rental INT NOT NULL,
+    Amount_Paid DECIMAL(10,2) NOT NULL,
+    Payment_Method NVARCHAR(50) NOT NULL,
+    Payment_Date DATE NOT NULL,
+    FOREIGN KEY (Id_Rental) REFERENCES Rental(Id_Rental) ON DELETE CASCADE
+);
+GO
+
+-- Tabla Employee
+CREATE TABLE Employee (
+    Id_Employee INT IDENTITY(1,1) PRIMARY KEY,
+    First_Name NVARCHAR(50) NOT NULL,
+    Last_Name NVARCHAR(50) NOT NULL,
+    Role NVARCHAR(50) NOT NULL,
+    Phone NVARCHAR(20) NOT NULL,
+    Email NVARCHAR(100) UNIQUE NOT NULL,
+    Salary_Per_Event DECIMAL(10,2) NOT NULL
+);
+GO
