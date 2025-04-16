@@ -22,8 +22,10 @@ builder.Services.AddCors(options =>
 
 #region Dependency Injection (DI)
 
-builder.Services.AddDbContext<RentalSystem>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("RentalSystemDB")));
+builder.Services.AddDbContext<RentalSystem>(optionsAction =>
+    optionsAction
+    .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+    );
 
 builder.Services.AddScoped<IClientDAL, ClientDAL>();
 builder.Services.AddScoped<IEmployeeDAL, EmployeeDAL>();
@@ -47,6 +49,7 @@ builder.Services.AddScoped<IEventoService, EventoService>();
 #endregion
 
 var app = builder.Build();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -54,9 +57,9 @@ if (app.Environment.IsDevelopment())
 
     app.UseDeveloperExceptionPage();
 }
-
 app.UseRouting();
 app.UseCors("AllowFrontend");
+app.UseMiddleware<ApiKeyMiddleware>();
 app.UseAuthorization();
 app.MapControllers();
 
