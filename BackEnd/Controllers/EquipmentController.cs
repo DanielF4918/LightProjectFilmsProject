@@ -62,25 +62,21 @@ namespace BackEnd.Controllers
         }
 
         [HttpPut("{id}")]
+<<<<<<< Updated upstream
         [AuthorizeRole("Admin")] // ✅ Solo Admin puede editar equipos
         public IActionResult Put(int id, [FromBody] EquipmentDTO equipmentDTO)
+=======
+        public IActionResult Put(int id, [FromBody] Equipment equipment)
+>>>>>>> Stashed changes
         {
             try
             {
-                if (equipmentDTO == null)
+                if (equipment == null || equipment.IdEquipment != id) // Verificamos que el ID del objeto y el de la URL coincidan
                 {
-                    _logger.LogError("El intento de actualizar un equipo fue con datos nulos");
-                    return BadRequest("Equipment data is null");
+                    _logger.LogError("Intento de actualizar equipo con datos incorrectos");
+                    return BadRequest("Invalid equipment data");
                 }
 
-                var equipment = new Equipment
-                {
-                    IdEquipment = id,
-                    EquipmentName = equipmentDTO.EquipmentName,
-                    Description = equipmentDTO.Description,
-                    Category = equipmentDTO.Category,
-                    DailyRate = equipmentDTO.DailyRate
-                };
                 _equipmentService.Update(equipment);
                 return Ok(new { message = "Equipment editado con éxito" });
             }
