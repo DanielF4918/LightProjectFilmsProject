@@ -17,6 +17,7 @@ public partial class Rental
 
     public virtual Evento IdEventNavigation { get; set; } = null!;
 
+
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
     public virtual ICollection<RentalDetail> RentalDetails { get; set; } = new List<RentalDetail>();
