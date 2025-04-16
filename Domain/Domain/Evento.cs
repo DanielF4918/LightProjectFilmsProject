@@ -17,7 +17,7 @@ public partial class Evento
 
     public int IdClient { get; set; }
 
-    public virtual Client IdClientNavigation { get; set; } = null!;
+    public virtual Client? IdClientNavigation { get; set; }
 
     public virtual ICollection<Rental> Rentals { get; set; } = new List<Rental>();
 }
