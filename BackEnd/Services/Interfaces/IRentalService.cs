@@ -6,10 +6,12 @@ namespace BackEnd.Services.Interfaces
 {
     public interface IRentalService
     {
-        void Add(Rental entity);
-        void Update(Rental entity);
+        void Add(RentalDTO entity);
+        void Update(RentalDTO entity);
         void Delete(int id);
         RentalDTO GetById(int id);
         IEnumerable<RentalDTO> GetAll();
+
+        IEnumerable<RentalDTO> GetRentalsWithEventName();
     }
 }

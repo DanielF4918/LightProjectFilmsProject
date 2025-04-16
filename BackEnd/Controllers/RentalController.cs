@@ -41,29 +41,64 @@ namespace BackEnd.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Rental rental)
+        public IActionResult Post([FromBody] RentalDTO rental)
         {
-            if (rental == null)
+            try
             {
-                _logger.LogError("Intento de agregar una renta con datos nulos.");
-                return BadRequest("Rental data is null.");
-            }
+                if (rental == null)
+                {
+                    return BadRequest("Rental data is null.");
+                }
 
-            _rentalService.Add(rental);
-            return CreatedAtAction(nameof(Get), new { id = rental.IdRental }, rental);
+                //  Validación de IdEvent
+                if (rental.IdEvent == null || rental.IdEvent == 0)
+                {
+                    return BadRequest("Error: IdEvent is required.");
+                }
+
+                _rentalService.Add(rental);
+
+                return Ok(new { message = "Rental created successfully!" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error creating rental: {ex.Message}");
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
         }
 
-        [HttpPut]
-        public IActionResult Put([FromBody] Rental rental)
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody] RentalDTO rentalDTO)
         {
-            if (rental == null)
+            try
             {
-                _logger.LogError("Intento de actualizar una renta con datos nulos.");
-                return BadRequest("Invalid rental data.");
-            }
+                if (rentalDTO == null || id != rentalDTO.IdRental)
+                {
+                    _logger.LogError("Intento de actualizar una renta con datos nulos o ID no coincidente.");
+                    return BadRequest("Invalid rental data or ID mismatch.");
+                }
 
-            _rentalService.Update(rental);
-            return NoContent();
+                var existingRental = _rentalService.GetById(id);
+                if (existingRental == null)
+                {
+                    _logger.LogWarning($"Rental con ID {id} no encontrado.");
+                    return NotFound($"Rental with ID {id} not found.");
+                }
+
+                //  Validación de IdEvent igual al Create
+                if (rentalDTO.IdEvent == null || rentalDTO.IdEvent == 0)
+                {
+                    return BadRequest("Error: IdEvent is required.");
+                }
+
+                _rentalService.Update(rentalDTO);
+                return Ok(new { message = "Rental updated successfully!" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al actualizar la renta: {ex.Message}");
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
@@ -73,5 +108,25 @@ namespace BackEnd.Controllers
             _logger.LogInformation($"Renta con ID {id} eliminada.");
             return NoContent();
         }
+
+        [HttpGet("GetRentalsWithEventName")]
+        public IActionResult GetRentalsWithEventName()
+        {
+            try
+            {
+                var rentals = _rentalService.GetRentalsWithEventName();
+                if (rentals == null || !rentals.Any())
+                {
+                    return NotFound("No rentals found.");
+                }
+                return Ok(rentals);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error retrieving rentals: {ex.Message}");
+                return StatusCode(500, $"Internal Server Error: {ex.Message}");
+            }
+        }
+
     }
 }
